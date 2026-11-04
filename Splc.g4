@@ -97,6 +97,7 @@ functionDef
  */
 parameterList
     : parameter (COMMA parameter)*
+    | parameter parameter {reportMissing(COMMA, currentLine());}
     ;
 
 parameter
@@ -148,7 +149,21 @@ expressionStatement
  * The temporary Number-only rule keeps the starter grammar compilable.
  */
 expression
-    : Number
+    : Identifier LPAREN argumentList? RPAREN 
+    | expression LBRACK expression RBRACK 
+    | expression DOT Identifier
+    | <assoc=right> expression POW expression
+    | (PLUS | MINUS | NOT) expression
+    | expression (STAR | DIV | MOD) expression
+    | expression (PLUS | MINUS) expression
+    | expression (LT | LE | GT | GE) expression
+    | expression (EQ | NEQ) expression
+    | expression AND expression
+    | expression OR expression
+    | <assoc=right> expression ASSIGN expression
+    | LPAREN expression RPAREN
+    | Identifier
+    | Number
     ;
 
 argumentList

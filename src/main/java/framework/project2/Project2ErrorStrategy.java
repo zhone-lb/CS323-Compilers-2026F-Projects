@@ -2,6 +2,7 @@ package framework.project2;
 
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.misc.IntervalSet;
 
 /**
  * Project 2 TODO.
@@ -28,7 +29,7 @@ public final class Project2ErrorStrategy extends DefaultErrorStrategy {
         }
 
         beginErrorCondition(recognizer);
-
+        reporter.reportMissing(recognizer.getExpectedTokens().getMinElement(), recognizer.getCurrentToken().getLine() - 1);
         /*
          * TODO:
          * Report the missing symbol through ErrorReporter.
@@ -44,9 +45,9 @@ public final class Project2ErrorStrategy extends DefaultErrorStrategy {
         if (inErrorRecoveryMode(recognizer)) {
             return;
         }
-
+        
         beginErrorCondition(recognizer);
-
+        reporter.reportExtraneous(recognizer.getCurrentToken().getType(), recognizer.getCurrentToken().getLine() - 1);
         /*
          * TODO:
          * Report the extraneous symbol through ErrorReporter.
