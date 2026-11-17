@@ -14,14 +14,22 @@ public class Scope {
     }
     // TODO: check ONLY current scope for a duplicate; permit shadowing.
     public boolean define(Symbol symbol) {
-        throw new UnsupportedOperationException("TODO: Scope.define");
+        if (symbols.containsKey(symbol.getName())) return false;
+        symbols.put(symbol.getName(), symbol);
+        return true;
     }
     // TODO: current scope only.
     public Symbol resolveLocal(String name) {
-        throw new UnsupportedOperationException("TODO: Scope.resolveLocal");
+        return symbols.get(name);
     }
     // TODO: current scope, then recursively parent; return null if missing.
     public Symbol resolve(String name) {
-        throw new UnsupportedOperationException("TODO: Scope.resolve");
+        Scope currentScope = this;
+        while (currentScope != null) {
+            Symbol symbol = currentScope.resolveLocal(name);
+            if (symbol != null) return symbol;
+            currentScope = currentScope.getParent();
+        }
+        return null;
     }
 }
